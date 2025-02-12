@@ -59,7 +59,7 @@ def step():
   samples = Tensor.randint(batch_size, high=X_train.shape[0])
   X, Y = X_train[samples], Y_train[samples]
   optim.zero_grad()
-  loss = model(X).sparse_categorical_crossentropy(Y).backward()
+  loss = model(X).softmax().sparse_categorical_crossentropy(Y).backward()
   optim.step()
   return loss
 
@@ -69,8 +69,3 @@ for s in range(1000):
     Tensor.training = False
     acc = (model(X_test).softmax().argmax(axis=1) == Y_test).mean().item()
     print(f"step {s:4d}, loss {loss.item():.2f}, acc {acc*100.:.2f}%")
-
-# Questions:
-# Adam optimizers
-# Numerical instability
-# What is a batchnorm?
